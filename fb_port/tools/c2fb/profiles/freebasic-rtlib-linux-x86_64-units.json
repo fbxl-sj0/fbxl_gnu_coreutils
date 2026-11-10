@@ -1,0 +1,561 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "pattern": "core/gosub.c",
+      "header_options": [
+        "--fb-include=crt/setjmp.bi"
+      ]
+    },
+    {
+      "pattern": "devices/dev_com.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_cons_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_err_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_file_encod_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_file_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_lpt.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_pipe_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_scrn.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_scrn_init.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "devices/dev_tcp.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "drivers/linux/io_mouse.c",
+      "body_options": [
+        "--include-global-definitions"
+      ],
+      "header_options": [
+        "--emit-source=*gpm.h",
+        "--emit-source=*termios-struct.h"
+      ]
+    },
+    {
+      "pattern": "drivers/linux/io_multikey.c",
+      "body_options": [
+        "--include-global-definitions"
+      ],
+      "header_options": [
+        "--emit-source=*termios-struct.h"
+      ]
+    },
+    {
+      "pattern": "drivers/unix/io_inkey.c",
+      "body_options": [
+        "--include-global-definitions"
+      ],
+      "header_options": [
+        "--emit-source=*termios-struct.h"
+      ]
+    },
+    {
+      "pattern": "drivers/unix/io_xfocus.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "drivers/unix/hinit.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "drivers/unix/scancodes_x11.c",
+      "header_options": [
+        "--type-map=KeyCode=UByte"
+      ],
+      "body_options": [
+        "--type-map=KeyCode=UByte"
+      ]
+    },
+    {
+      "pattern": "files/file_attr.c",
+      "header_options": [
+        "--type-map=fpos_t=fpos_t",
+        "--type-map=fpos64_t=fpos_t",
+        "--type-map=__fpos64_t=fpos_t",
+        "--type-map=_G_fpos64_t=fpos_t"
+      ],
+      "body_options": [
+        "--type-map=fpos_t=fpos_t",
+        "--type-map=fpos64_t=fpos_t",
+        "--type-map=__fpos64_t=fpos_t",
+        "--type-map=_G_fpos64_t=fpos_t"
+      ]
+    },
+    {
+      "pattern": "objects/oop_object.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "math/math_rnd.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "math/longdouble_ops.c",
+      "header_options": [
+        "--type-map=int64_t=LongInt",
+        "--type-map=uint64_t=ULongInt"
+      ],
+      "body_options": [
+        "--type-map=int64_t=LongInt",
+        "--type-map=uint64_t=ULongInt",
+        "--exclude-proc=fb_LongDoubleToNative"
+      ]
+    },
+    {
+      "pattern": "errors/error_frame.c",
+      "header_options": [
+        "--fb-include=crt/setjmp.bi"
+      ]
+    },
+    {
+      "pattern": "strings/str_asc.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING"
+      ],
+      "body_options": [
+        "--rename=fb_hStrDelTemp=fb_hStrDelTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_chr.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_bin.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_bin_lng.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_bin_ptr.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_hex.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_hex_lng.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_hex_ptr.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_oct.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_oct_lng.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_oct_ptr.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_len.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING"
+      ],
+      "body_options": [
+        "--rename=fb_hStrDelTemp=fb_hStrDelTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_fill.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp=fb_hStrAllocTempImpl",
+        "--rename=fb_hStrDelTemp=fb_hStrDelTempImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_hskip.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_left.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp_NoLock=fb_hStrAllocTempNoLockImpl",
+        "--rename=fb_hStrDelTemp_NoLock=fb_hStrDelTempNoLockImpl",
+        "--rename=fb_hStrCopy=fb_hStrCopyImpl",
+        "--rename=fb_StrLock=fb_StrLockImpl",
+        "--rename=fb_StrUnlock=fb_StrUnlockImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_right.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp_NoLock=fb_hStrAllocTempNoLockImpl",
+        "--rename=fb_hStrDelTemp_NoLock=fb_hStrDelTempNoLockImpl",
+        "--rename=fb_hStrCopy=fb_hStrCopyImpl",
+        "--rename=fb_StrLock=fb_StrLockImpl",
+        "--rename=fb_StrUnlock=fb_StrUnlockImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_reverse.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp_NoLock=fb_hStrAllocTempNoLockImpl",
+        "--rename=fb_hStrDelTemp_NoLock=fb_hStrDelTempNoLockImpl",
+        "--rename=fb_StrLock=fb_StrLockImpl",
+        "--rename=fb_StrUnlock=fb_StrUnlockImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX",
+        "--type-map=FB_RTLIB_CTX_=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    },
+    {
+      "pattern": "strings/str_*trim*.c",
+      "header_options": [
+        "--exclude-source=*fb.h",
+        "--exclude-source=*fb_*.h",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "body_options": [
+        "--rename=fb_hStrAllocTemp_NoLock=fb_hStrAllocTempNoLockImpl",
+        "--rename=fb_hStrDelTemp_NoLock=fb_hStrDelTempNoLockImpl",
+        "--rename=fb_hStrDelTemp=fb_hStrDelTempImpl",
+        "--rename=fb_hStrCopy=fb_hStrCopyImpl",
+        "--rename=fb_hStrSkipChar=fb_hStrSkipCharImpl",
+        "--rename=fb_hStrSkipCharRev=fb_hStrSkipCharRevImpl",
+        "--rename=fb_StrLock=fb_StrLockImpl",
+        "--rename=fb_StrUnlock=fb_StrUnlockImpl",
+        "--type-map=FBSTRING=FBSTRING",
+        "--type-map=_FBSTRING=FBSTRING",
+        "--type-map=FB_RTLIB_CTX=FB_RTLIB_CTX_PREFIX"
+      ],
+      "fb_source_patterns": [
+        "strings/fb_string_runtime.bi"
+      ],
+      "fb_source_include_closure": true,
+      "no_forward_declarations": true
+    }
+  ]
+}

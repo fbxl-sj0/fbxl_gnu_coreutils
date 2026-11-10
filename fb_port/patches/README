@@ -1,0 +1,30 @@
+GNU Coreutils FreeBASIC port
+File: fb_port/patches/README
+
+freebasic-shared-data-alias.patch preserves the compiler change required for
+C2FB's initialized and tentative global definitions. It accepts Alias on
+non-private shared data and exports that storage with the requested C symbol.
+It also includes the Linux C/FreeBASIC linked regression under tests/functions/.
+It intentionally excludes other changes present in the development checkout.
+
+The patch was extracted from the jasonkfirth/fbc source checkout based on:
+
+  d2b8a2ee6fb1a4a3fadef47e9620473b944f46e6
+  https://github.com/jasonkfirth/fbc.git
+
+From a clean FreeBASIC checkout, use the absolute path to this patch:
+
+  git apply --check /path/to/Freebasic-gnu_coreutils/fb_port/patches/freebasic-shared-data-alias.patch
+  git apply /path/to/Freebasic-gnu_coreutils/fb_port/patches/freebasic-shared-data-alias.patch
+
+Set COREUTILS_FBC_SOURCE to the patched checkout and run port.py compiler as
+described in ../README. The existing development checkout already contains
+this change; do not apply it twice. An installed FreeBASIC compiler and its
+runtime are still needed to build the patched compiler.
+
+The .bmk regression runs through the FreeBASIC multi-module test harness. Its
+Linux case links shared-alias-data.c with shared-alias-data.bas and checks
+initialization and writes in both directions. Other platforms use the noop
+entry because this regression currently verifies the Linux linker behavior.
+
+end of fb_port/patches/README

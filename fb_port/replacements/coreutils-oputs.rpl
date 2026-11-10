@@ -1,0 +1,19 @@
+convert c: spaces += !! isspace (*s++);
+to fb:
+    spaces += CoreutilsIsSpaceAtPointer(@s)
+    s += 1
+
+convert c: _Generic (0 ? (option) : (void *) 1, const void *: (const char *) (strchr (option, '-')), default: strchr (option, '-'))
+to fb: Cast(Const ZString Ptr, strchr(option, 45))
+
+convert c: (__extension__ ((__builtin_constant_p (1) && __builtin_constant_p (first_word - option) && (size_t) (1) * (size_t) (first_word - option) <= 8 && (size_t) (1) != 0) ? ({ const char *__ptr = (const char *) (option); FILE *__stream = (stdout); size_t __cnt; for (__cnt = (size_t) (1) * (size_t) (first_word - option); __cnt > 0; --__cnt) if (putc_unlocked (*__ptr++, __stream) == (-1)) break; ((size_t) (1) * (size_t) (first_word - option) - __cnt) / (size_t) (1); }) : (((__builtin_constant_p (1) && (size_t) (1) == 0) || (__builtin_constant_p (first_word - option) && (size_t) (first_word - option) == 0)) ? ((void) (option), (void) (stdout), (void) (1), (void) (first_word - option), (size_t) 0) : fwrite_unlocked (option, 1, first_word - option, stdout))));
+to fb: CoreutilsFwriteUnlocked(option, 1, Cast(CULong, first_word - option), CoreutilsStdout())
+
+convert c: (__extension__ ((__builtin_constant_p (1) && __builtin_constant_p (desc_text - first_word) && (size_t) (1) * (size_t) (desc_text - first_word) <= 8 && (size_t) (1) != 0) ? ({ const char *__ptr = (const char *) (first_word); FILE *__stream = (stdout); size_t __cnt; for (__cnt = (size_t) (1) * (size_t) (desc_text - first_word); __cnt > 0; --__cnt) if (putc_unlocked (*__ptr++, __stream) == (-1)) break; ((size_t) (1) * (size_t) (desc_text - first_word) - __cnt) / (size_t) (1); }) : (((__builtin_constant_p (1) && (size_t) (1) == 0) || (__builtin_constant_p (desc_text - first_word) && (size_t) (desc_text - first_word) == 0)) ? ((void) (first_word), (void) (stdout), (void) (1), (void) (desc_text - first_word), (size_t) 0) : fwrite_unlocked (first_word, 1, desc_text - first_word, stdout))));
+to fb: CoreutilsFwriteUnlocked(first_word, 1, Cast(CULong, desc_text - first_word), CoreutilsStdout())
+
+convert c: (__extension__ ((__builtin_constant_p (sizeof *s) && __builtin_constant_p (s_len) && (size_t) (sizeof *s) * (size_t) (s_len) <= 8 && (size_t) (sizeof *s) != 0) ? ({ const char *__ptr = (const char *) (s); FILE *__stream = (stdout); size_t __cnt; for (__cnt = (size_t) (sizeof *s) * (size_t) (s_len); __cnt > 0; --__cnt) if (putc_unlocked (*__ptr++, __stream) == (-1)) break; ((size_t) (sizeof *s) * (size_t) (s_len) - __cnt) / (size_t) (sizeof *s); }) : (((__builtin_constant_p (sizeof *s) && (size_t) (sizeof *s) == 0) || (__builtin_constant_p (s_len) && (size_t) (s_len) == 0)) ? ((void) (s), (void) (stdout), (void) (sizeof *s), (void) (s_len), (size_t) 0) : fwrite_unlocked (s, sizeof *s, s_len, stdout))));
+to fb: CoreutilsFwriteUnlocked(s, 1, Cast(CULong, s_len), CoreutilsStdout())
+
+convert c: (__extension__ ((__builtin_constant_p (ind->len) && __builtin_constant_p (1) && (size_t) (ind->len) * (size_t) (1) <= 8 && (size_t) (ind->len) != 0) ? ({ const char *__ptr = (const char *) (ind->string); FILE *__stream = (stdout); size_t __cnt; for (__cnt = (size_t) (ind->len) * (size_t) (1); __cnt > 0; --__cnt) if (putc_unlocked (*__ptr++, __stream) == (-1)) break; ((size_t) (ind->len) * (size_t) (1) - __cnt) / (size_t) (ind->len); }) : (((__builtin_constant_p (ind->len) && (size_t) (ind->len) == 0) || (__builtin_constant_p (1) && (size_t) (1) == 0)) ? ((void) (ind->string), (void) (stdout), (void) (ind->len), (void) (1), (size_t) 0) : fwrite_unlocked (ind->string, ind->len, 1, stdout))));
+to fb: CoreutilsFwriteUnlocked(ind->string, ind->len, 1, CoreutilsStdout())

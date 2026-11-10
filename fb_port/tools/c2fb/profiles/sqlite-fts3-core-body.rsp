@@ -1,0 +1,14 @@
+# Bind C2FB's FTS3 core bodies to the layouts reviewed for the FreeBASIC port.
+# Keep Fts3SegReader unmapped so sizeof(Fts3SegReader) retains its C record.
+--type-map=Fts3Table=SqliteFts3Table
+--type-map=Fts3Index=SqliteFts3TableIndex
+--type-map=Fts3Cursor=SqliteFts3Cursor
+--type-map=Fts3MultiSegReader=SqliteFts3MultiSegReader
+--type-map=Fts3DeferredToken=SqliteFts3DeferredToken
+--type-map=PendingList=SqliteFts3PendingList
+--type-map=Fts3Doclist=SqliteFts3Doclist
+--type-map=Fts3PhraseToken=SqliteFts3PhraseToken
+--type-map=Fts3Phrase=SqliteFts3Phrase
+--type-map=Fts3Expr=SqliteFts3Expr
+--type-map=Fts3Hash=Fts3Hash
+--type-map=ParseContext=SqliteFts3ParseContext

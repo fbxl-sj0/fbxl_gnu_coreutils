@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "pattern": "sfx_core.c",
+      "header_options": [
+        "--emit-source=struct_timespec.h"
+      ]
+    },
+    {
+      "pattern": "sfx_decode.c",
+      "header_options": [
+        "--emit-source=*third_party/dr_mp3.h"
+      ]
+    },
+    {
+      "pattern": "sfx_midi_play.c",
+      "header_options": [
+        "--emit-source=struct_timespec.h"
+      ],
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "sfx_driver_null.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "sfx_midi_open.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "sfx_midi_pause.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "sfx_vars.c",
+      "body_options": [
+        "--include-global-definitions"
+      ]
+    },
+    {
+      "pattern": "sfx_play.c",
+      "body_compiler_options": [
+        "-D__NO_CTYPE"
+      ]
+    }
+  ]
+}

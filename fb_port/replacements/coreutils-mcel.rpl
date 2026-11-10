@@ -1,0 +1,20 @@
+convert c: ((0 < len) ? (void) 0 : __builtin_unreachable ());
+to fb: CoreutilsMcelAssume(0 < len)
+
+convert c: ((len <= MCEL_LEN_MAX) ? (void) 0 : __builtin_unreachable ());
+to fb: CoreutilsMcelAssume(len <= c2fb_MCEL_LEN_MAX)
+
+convert c: ((ch <= MCEL_CHAR_MAX) ? (void) 0 : __builtin_unreachable ());
+to fb: CoreutilsMcelAssume(ch <= c2fb_MCEL_CHAR_MAX)
+
+convert c: ((MCEL_ERR_MIN <= err) ? (void) 0 : __builtin_unreachable ());
+to fb: CoreutilsMcelAssume(c2fb_MCEL_ERR_MIN <= err)
+
+convert c: i < MCEL_LEN_MAX - 1
+to fb: i < c2fb_MCEL_LEN_MAX - 1
+
+convert c: return (mcel_t) {.ch = ch, .len = len};
+to fb: Return Type<c2fb_mcel_t>(ch, 0, len)
+
+convert c: return (mcel_t) {.err = err, .len = 1};
+to fb: Return Type<c2fb_mcel_t>(0, err, 1)

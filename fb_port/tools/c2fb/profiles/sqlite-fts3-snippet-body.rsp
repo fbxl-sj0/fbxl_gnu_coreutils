@@ -1,0 +1,24 @@
+# Map the C MatchinfoBuffer record to the FreeBASIC layout view used by the
+# translated FTS3 matchinfo cleanup routines.
+--type-map=MatchinfoBuffer=Fts3MatchinfoBuffer
+--type-map=Fts3Table=SqliteFts3Table
+--type-map=Fts3Cursor=SqliteFts3Cursor
+--type-map=Fts3Expr=SqliteFts3Expr
+--type-map=Fts3Phrase=SqliteFts3Phrase
+--type-map=LcsIterator=SqliteFts3LcsIterator
+--type-map=sqlite3_vtab=SqliteVtab
+--type-map=sqlite3_vtab_cursor=SqliteVtabCursor
+--type-map=sqlite3_tokenizer=Fts3Tokenizer
+--type-map=sqlite3_tokenizer_cursor=Fts3TokenizerCursor
+--type-map=sqlite3_tokenizer_module=Fts3TokenizerModule
+--type-map=sqlite3_context=Any
+--type-map=sqlite3_stmt=Any
+--type-map=sqlite3_blob=Any
+--type-map=LoadDoclistCtx=SqliteFts3LoadDoclistCtx
+--type-map=SnippetPhrase=SqliteFts3SnippetPhrase
+--type-map=SnippetIter=SqliteFts3SnippetIter
+--type-map=SnippetFragment=SqliteFts3SnippetFragment
+--type-map=MatchInfo=SqliteFts3MatchInfo
+--type-map=StrBuffer=SqliteFts3StrBuffer
+--type-map=TermOffset=SqliteFts3TermOffset
+--type-map=TermOffsetCtx=SqliteFts3TermOffsetCtx

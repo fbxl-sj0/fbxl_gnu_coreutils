@@ -1,0 +1,39 @@
+# Project: C2FB FreeBASIC interoperability profile
+# File: freebasic-linux-glibc-x86_64.rsp
+# Purpose: Map common glibc declarations to FreeBASIC's Linux CRT bindings.
+# Use only when the C preprocessor and FreeBASIC compiler target Linux x86-64.
+
+--fb-include=crt/stdio.bi
+--fb-include=crt/stdlib.bi
+--fb-include=crt/stdarg.bi
+--fb-include=crt/wchar.bi
+--fb-include=crt/sys/types.bi
+--fb-include=crt/pthread.bi
+
+--type-map=__gnuc_va_list=Cva_List
+--type-map=__builtin_va_list=Cva_List
+--type-map=__mbstate_t=mbstate_t
+--type-map=__atomic_wide_counter=ULongInt
+--type-map=__time_t=CLong
+--type-map=__syscall_slong_t=CLong
+--type-map=lldiv_t=lldiv_t
+--type-map=ssize_t=ssize_t
+--type-map=size_t=CULong
+--type-map=pthread_t=CULong
+--type-map=FILE=FILE
+--type-map=pthread_mutex_t=pthread_mutex_t
+--type-map=pthread_mutexattr_t=pthread_mutexattr_t
+--type-map=pthread_cond_t=pthread_cond_t
+--type-map=pthread_condattr_t=pthread_condattr_t
+--type-map=pthread_once_t=pthread_once_t
+--expand-type=ssize_t
+--type-map=fb_off_t=off_t
+--expand-type=fb_off_t
+--type-map=wchar_t=Long
+--type-map=intptr_t=CLong
+--type-map=uintptr_t=CULong
+
+# Use the CRT pthread declarations for glibc synchronization object storage.
+# glibc x86-64 defines pthread_t as unsigned long and its time fields as long.
+# glibc's private counter union has 64-bit storage on this target.
+# end of freebasic-linux-glibc-x86_64.rsp

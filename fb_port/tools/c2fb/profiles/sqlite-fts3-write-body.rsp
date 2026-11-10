@@ -1,0 +1,8 @@
+# Reuse the reviewed multi-reader and cursor layouts in generated bodies.
+# Keep Fts3SegReader as a visible C record so C2FB can lower sizeof(Fts3SegReader).
+--type-map=Fts3MultiSegReader=SqliteFts3MultiSegReader
+--type-map=Fts3Table=SqliteFts3Table
+--type-map=Fts3Cursor=SqliteFts3Cursor
+--type-map=Fts3DeferredToken=SqliteFts3DeferredToken
+--type-map=PendingList=SqliteFts3PendingList
+--type-map=Fts3SegFilter=SqliteFts3SegFilter

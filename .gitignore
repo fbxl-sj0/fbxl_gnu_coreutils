@@ -1,0 +1,24 @@
+# Reference builds and generated work products
+/fb_port/build/
+/fb_port/logs/
+/fb_port/reports/
+/fb_port/generated/
+/fb_port/generated-unselected*/
+/fb_port/generated-windows*/
+/fb_port/probes/
+/fb_port/tools/c2fb/build/
+/fb_port/tools/c2fb/gmon.out
+/autom4te.cache/
+/actmp.*
+/configure~
+
+# Compiler and Python artifacts
+__pycache__/
+*.pyc
+*.o
+*.so
+*.a
+*.out
+*.log
+*.fbc-*
+.c2fb-*/

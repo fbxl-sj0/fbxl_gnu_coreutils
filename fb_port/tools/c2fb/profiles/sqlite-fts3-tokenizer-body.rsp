@@ -1,0 +1,5 @@
+# Use the FreeBASIC tokenizer ABI records while translating FTS3 callbacks.
+--type-map=sqlite3_tokenizer_module=Fts3TokenizerModule
+--type-map=sqlite3_tokenizer=Fts3Tokenizer
+--type-map=sqlite3_tokenizer_cursor=Fts3TokenizerCursor
+--type-map=sqlite3_module=SqliteModuleCallbacks

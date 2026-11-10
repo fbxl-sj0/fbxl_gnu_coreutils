@@ -1,0 +1,130 @@
+diff --git a/src/compiler/parser/declarations/parser-decl-var.bas b/src/compiler/parser/declarations/parser-decl-var.bas
+index d232b0b90..b2c051b5b 100644
+--- a/src/compiler/parser/declarations/parser-decl-var.bas
++++ b/src/compiler/parser/declarations/parser-decl-var.bas
+@@ -1836,9 +1836,19 @@ function cVarDecl _
+ 			dimensions, have_bounds, exprTB() )
+ 
+ 		palias = NULL
+-		if( (attrib and (FB_SYMBATTRIB_PUBLIC or FB_SYMBATTRIB_EXTERN)) <> 0 ) then
++		if( (attrib and (FB_SYMBATTRIB_PUBLIC or FB_SYMBATTRIB_EXTERN)) <> 0 or _
++		    ((attrib and FB_SYMBATTRIB_SHARED) <> 0 and _
++		     (attrib and FB_SYMBATTRIB_PRIVATE) = 0) ) then
+ 			'' [ALIAS "id"]
++			'' Shared module data can use a C linker name independent of its
++			'' FreeBASIC identifier, just like a public procedure definition.
+ 			palias = cAliasAttribute()
++			if( palias <> NULL and _
++			    (attrib and (FB_SYMBATTRIB_SHARED or FB_SYMBATTRIB_PRIVATE or _
++			                 FB_SYMBATTRIB_EXTERN)) = _
++			    FB_SYMBATTRIB_SHARED ) then
++				attrib or= FB_SYMBATTRIB_PUBLIC
++			end if
+ 		end if
+ 
+ 		'' Data type
+diff --git a/tests/functions/shared-alias-data.bas b/tests/functions/shared-alias-data.bas
+new file mode 100644
+--- /dev/null
++++ b/tests/functions/shared-alias-data.bas
+@@ -0,0 +1,24 @@
++'' Project: FreeBASIC compiler tests
++'' File: shared-alias-data.bas
++'' Purpose: Define shared storage with a C linker symbol.
++'' Responsibilities: Check initialization, C reads, C writes, and FB reads.
++'' This file intentionally does NOT test imported data declarations.
++
++' TEST_MODE : MULTI_MODULE_OK
++
++Dim Shared c2fb_shared_value Alias "c2fb_shared_alias_data" As Long = 17
++
++Extern "C"
++    Declare Function c2fb_read_shared_value Cdecl Alias "c2fb_read_shared_alias_data"() As Long
++    Declare Sub c2fb_write_shared_value Cdecl Alias "c2fb_write_shared_alias_data"(ByVal value As Long)
++End Extern
++
++If c2fb_read_shared_value() <> 17 Then End 1
++c2fb_write_shared_value(29)
++If c2fb_shared_value <> 29 Then End 2
++c2fb_shared_value = -43
++If c2fb_read_shared_value() <> -43 Then End 3
++
++Print "SHARED_ALIAS_DATA=PASS"
++
++'' end of shared-alias-data.bas
+diff --git a/tests/functions/shared-alias-data.bmk b/tests/functions/shared-alias-data.bmk
+new file mode 100644
+--- /dev/null
++++ b/tests/functions/shared-alias-data.bmk
+@@ -0,0 +1,19 @@
++# Project: FreeBASIC compiler tests
++# File: shared-alias-data.bmk
++# Purpose: Link a C reader and writer with aliased FreeBASIC shared storage.
++# Responsibilities: Compile the C observer and configure the main test module.
++# This file intentionally does NOT implement either language module.
++
++# TEST_MODE : MULTI_MODULE_OK
++
++ifeq ($(TESTS_TARGET_OS),linux)
++MAIN := shared-alias-data.bas
++EXTRA_OBJS := shared-alias-data-c.o
++
++$(SRCDIR)shared-alias-data-c.o: $(SRCDIR)shared-alias-data.c
++	$(CC) -c -o $@ $<
++else
++MAIN := shared-alias-data-noop.bas
++endif
++
++# end of shared-alias-data.bmk
+diff --git a/tests/functions/shared-alias-data.c b/tests/functions/shared-alias-data.c
+new file mode 100644
+--- /dev/null
++++ b/tests/functions/shared-alias-data.c
+@@ -0,0 +1,33 @@
++/*
++    Project: FreeBASIC compiler tests
++
++    File: shared-alias-data.c
++
++    Purpose:
++
++        Access one FreeBASIC shared variable through its exported C symbol.
++
++    Responsibilities:
++
++        • read the FreeBASIC initializer
++        • write the same storage from C
++
++    This file intentionally does NOT contain:
++
++        • FreeBASIC compiler implementation logic
++        • an alternate copy of the exported variable
++*/
++
++extern int c2fb_shared_alias_data;
++
++int c2fb_read_shared_alias_data(void)
++{
++    return c2fb_shared_alias_data;
++}
++
++void c2fb_write_shared_alias_data(int value)
++{
++    c2fb_shared_alias_data = value;
++}
++
++/* end of shared-alias-data.c */
+diff --git a/tests/functions/shared-alias-data-noop.bas b/tests/functions/shared-alias-data-noop.bas
+new file mode 100644
+--- /dev/null
++++ b/tests/functions/shared-alias-data-noop.bas
+@@ -0,0 +1,9 @@
++'' Project: FreeBASIC compiler tests
++'' File: shared-alias-data-noop.bas
++'' Purpose: Provide a passing test entry on non-Linux targets.
++'' Responsibilities: Keep the Linux-specific C linker test scoped to Linux.
++'' This file intentionally does NOT test the C variable alias.
++
++Print "SHARED_ALIAS_DATA=SKIP"
++
++'' end of shared-alias-data-noop.bas

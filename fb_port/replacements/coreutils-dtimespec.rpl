@@ -1,0 +1,30 @@
+# Project: GNU Coreutils FreeBASIC port
+# File: coreutils-dtimespec.rpl
+# Purpose: Replace dtimespec_bound's glibc-specific inline body with an
+#          equivalent FreeBASIC body for the configured Linux x86-64 ABI.
+# Responsibilities: Preserve signed-zero handling and the documented
+#                    positive-underflow-bound contract.
+# This file does NOT implement duration parsing or general long-double support.
+convert c:
+    inline double
+    dtimespec_bound (double c, int err)
+    {
+      if (err == 34 && c == 0)
+        return (sizeof (c) == sizeof (long double) ? __builtin_signbitl (c) : sizeof (c) == sizeof (double) ? __builtin_signbit (c) : __builtin_signbitf (c)) ? -((double)4.94065645841246544176568792868221372e-324L) : ((double)4.94065645841246544176568792868221372e-324L);
+      double phi = ((double)2.22044604925031308084726333618164062e-16L) / 2 * (1 + ((double)2.22044604925031308084726333618164062e-16L));
+      return c + phi * c;
+    }
+to fb:
+    Private Function dtimespec_bound(ByVal c As Double, ByVal err As c2fb_c_int) As Double
+        If err = ERANGE AndAlso c = 0 Then
+            If CoreutilsDtimespecSignBit(c) <> 0 Then
+                Return -CoreutilsDtimespecUnderflowBound()
+            Else
+                Return CoreutilsDtimespecUnderflowBound()
+            End If
+        End If
+        Const epsilon As Double = 2.22044604925031308084726333618164062e-16
+        Dim phi As Double = epsilon / 2 * (1 + epsilon)
+        Return c + phi * c
+    End Function
+# end of coreutils-dtimespec.rpl

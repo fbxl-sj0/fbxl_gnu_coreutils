@@ -1,0 +1,41 @@
+GNU Coreutils FreeBASIC port
+File: fb_port/README
+
+This directory holds the FreeBASIC translation work, support declarations,
+conversion driver, focused checks, and the vendored C2FB converter. The
+repository contains no Coreutils implementation C sources. Keep a separate
+Coreutils 9.12 source checkout to rebuild the C reference, regenerate
+translations, or run the upstream suite.
+
+Configure paths from the repository root:
+
+  export COREUTILS_SOURCE=/path/to/coreutils-9.12
+  export COREUTILS_FBC=/path/to/fbc
+
+Then run:
+
+  python3 fb_port/port.py reference --jobs=8
+  python3 fb_port/port.py reference-tests --jobs=8
+  python3 fb_port/port.py translate --contexts --jobs=8
+  python3 fb_port/port.py audit --contexts
+  python3 fb_port/check.py
+
+The reference build and upstream tests use the external checkout selected by
+COREUTILS_SOURCE. Translation uses the checked-in converter under
+`tools/c2fb` unless COREUTILS_C2FB_TOOLS selects another checkout. The
+`compiler` action also builds FreeBASIC from source and requires
+COREUTILS_FBC_SOURCE. COREUTILS_FBC_INCLUDE and
+COREUTILS_FBC_RUNTIME_LIBDIR can select nonstandard installation paths.
+
+`generated-context/` contains the audited production candidate set. Each
+`*_candidates.bas` body has a matching `*_candidates_types.bi` declaration
+file. `candidate-map.csv` maps those pairs to relative Coreutils source paths.
+The generated files are translations, not proof that each Coreutils command
+is complete. The audit compares the FreeBASIC objects with the C reference;
+command-level checks use hybrid executables that still link C support code.
+
+The latest recorded status is in `STATUS.md`. Work files and logs are written
+under `build/` and `logs/`; temporary reports are written under `build/`.
+These outputs are ignored by Git.
+
+end of fb_port/README

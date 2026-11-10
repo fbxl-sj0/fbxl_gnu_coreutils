@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "pattern": "expr.c",
+      "fb_source_patterns": [
+        "sqlite3_expr.bas",
+        "sqlite3_string_utils.bas",
+        "sqlite3_vdbe_explain.bas",
+        "sqlite3_std_types.bi",
+        "sqlite3_db_types.bi",
+        "sqlite3_walker.bi",
+        "sqlite3_expr_types.bi",
+        "sqlite3_wal_types.bi",
+        "sqlite3_parser_types.bi",
+        "sqlite3_result.bi",
+        "sqlite3_vdbe_core.bi",
+        "sqlite3_parser_token.bi",
+        "sqlite3_api_declarations.bi",
+        "sqlite3_internal_api_declarations.bi"
+      ],
+      "fb_source_include_closure": true,
+      "body_options": [
+        "--target-profile=sqlite",
+        "--type-map=Parse=SqliteParseContext",
+        "--type-map=Expr=SqliteExpr",
+        "--type-map=ExprList=SqliteExprList",
+        "--type-map=Select=SqliteSelect",
+        "--type-map=With=SqliteWith",
+        "--type-map=Cte=SqliteCte",
+        "--type-map=Column=SqliteColumn"
+      ]
+    }
+  ]
+}
