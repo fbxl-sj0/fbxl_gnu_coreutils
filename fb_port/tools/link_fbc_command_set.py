@@ -132,7 +132,7 @@ def current_candidate_maps():
             pair = (candidate, reference)
             reference_map[reference] = pair
             source_map.setdefault(source, []).append(pair)
-    return reference_map, source_map
+    return reference_map, source_map, port.SOURCE
 
 
 def global_defined_symbols(object_path):
@@ -214,7 +214,8 @@ def configured_programs(variables):
 
 
 def command_object_inputs(
-    program, variables, reference_map, source_map, localized_directory, cache
+    program, variables, reference_map, source_map, source_root,
+    localized_directory, cache
 ):
     target_name = make_target_name(program)
     object_variable = f"src_{target_name}_OBJECTS"
@@ -243,7 +244,7 @@ def command_object_inputs(
             candidate_pair[0], candidate_pair[1], localized_directory, cache))
 
     for source in CURRENT_EXTRA_SOURCES_BY_PROGRAM.get(program, ()):
-        source_path = (PORT.parent / source).resolve()
+        source_path = (source_root / source).resolve()
         candidates = source_map.get(source_path, [])
         if len(candidates) != 1:
             raise RuntimeError(
@@ -399,7 +400,7 @@ def main():
 
     variables = makefile_variables(REFERENCE / "Makefile")
     programs = configured_programs(variables)
-    reference_map, source_map = current_candidate_maps()
+    reference_map, source_map, source_root = current_candidate_maps()
     args.output_directory.mkdir(parents=True, exist_ok=True)
     (args.output_directory / "src").mkdir(parents=True, exist_ok=True)
     localized_directory = args.output_directory / "localized-objects"
@@ -408,7 +409,7 @@ def main():
     plans = []
     for program in programs:
         objects = command_object_inputs(
-            program, variables, reference_map, source_map,
+            program, variables, reference_map, source_map, source_root,
             localized_directory, localized_cache,
         )
         archives, link_flags = command_link_inputs(program, variables)

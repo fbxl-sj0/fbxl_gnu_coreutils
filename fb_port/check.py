@@ -1702,6 +1702,7 @@ def main():
     spec.loader.exec_module(tests)
     converter = str(port.C2FB_CONVERTER)
     fbc = [str(compiler)]
+    fbc.extend(["-i", str(port.PORT.parent)])
     if port.FBC_RUNTIME_LIBDIR.is_dir():
         fbc.extend(["-p", str(port.FBC_RUNTIME_LIBDIR)])
     compiler_include_directory = compiler.parent.parent / "inc"

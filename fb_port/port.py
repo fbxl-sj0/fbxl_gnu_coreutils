@@ -708,6 +708,18 @@ def require_coreutils_source():
         )
 
 
+def source_relative_path(path):
+    resolved = Path(path).resolve()
+    for root in (REFERENCE, SOURCE):
+        try:
+            return resolved.relative_to(root).as_posix()
+        except ValueError:
+            continue
+    raise RuntimeError(
+        f"source file is outside COREUTILS_SOURCE and the reference build: {resolved}"
+    )
+
+
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".tmp")
@@ -791,7 +803,7 @@ def selected_database(patterns):
     selected = []
     for entry in database:
         source = (Path(entry["directory"]) / entry["file"]).resolve()
-        relative = source.relative_to(SOURCE).as_posix()
+        relative = source_relative_path(source)
         if not patterns or any(fnmatch.fnmatchcase(relative, pattern)
                                for pattern in patterns):
             selected.append(entry)
@@ -803,21 +815,20 @@ def selected_database(patterns):
 
 
 def normalize_generated_output(generated, patterns):
-    source_prefix = str(SOURCE) + os.sep
+    source_prefixes = (
+        (str(SOURCE) + os.sep, "$(COREUTILS_SOURCE)/"),
+        (str(REFERENCE) + os.sep, "$(COREUTILS_REFERENCE_BUILD)/"),
+    )
     for candidate in generated.glob("*_candidates.bas"):
         text = candidate.read_text(encoding="utf-8")
-        if source_prefix in text:
-            candidate.write_text(
-                text.replace(source_prefix, "$(COREUTILS_SOURCE)/"),
-                encoding="utf-8",
-            )
+        for prefix, replacement in source_prefixes:
+            text = text.replace(prefix, replacement)
+        candidate.write_text(text, encoding="utf-8")
     for type_context in generated.glob("*_candidates_types.bi"):
         text = type_context.read_text(encoding="utf-8")
-        if source_prefix in text:
-            type_context.write_text(
-                text.replace(source_prefix, "$(COREUTILS_SOURCE)/"),
-                encoding="utf-8",
-            )
+        for prefix, replacement in source_prefixes:
+            text = text.replace(prefix, replacement)
+        type_context.write_text(text, encoding="utf-8")
 
     source_map = generated / "compile-command-map.csv"
     if not source_map.is_file():
@@ -827,12 +838,7 @@ def normalize_generated_output(generated, patterns):
     new_rows = []
     for row in rows:
         source_path = Path(row["SourceFile"]).resolve()
-        try:
-            relative_source = source_path.relative_to(SOURCE).as_posix()
-        except ValueError as error:
-            raise RuntimeError(
-                f"translated source is outside COREUTILS_SOURCE: {source_path}"
-            ) from error
+        relative_source = source_relative_path(source_path)
         new_rows.append({
             "CandidateFile": row["CandidateFile"],
             "SourceFile": relative_source,
@@ -939,7 +945,7 @@ def apply_source_fb_profile_overrides(database, generated, contexts):
         model = driver.parse_command_entry(entry, index, database.parent)
         if model is None:
             continue
-        source = model.source_path.relative_to(SOURCE).as_posix()
+        source = source_relative_path(model.source_path)
         for override in SOURCE_FB_PROFILE_OVERRIDES:
             if source != override["source"]:
                 continue
@@ -1035,7 +1041,7 @@ def apply_source_fb_post_type_includes(database, generated, contexts):
         model = driver.parse_command_entry(entry, index, database.parent)
         if model is None:
             continue
-        source = model.source_path.relative_to(SOURCE).as_posix()
+        source = source_relative_path(model.source_path)
         selected_sources.add(source)
         include_path = includes_by_source.get(source)
         if include_path is None:
@@ -1117,7 +1123,7 @@ def apply_source_fb_post_declaration_includes(database, generated, contexts):
         model = driver.parse_command_entry(entry, index, database.parent)
         if model is None:
             continue
-        source = model.source_path.relative_to(SOURCE).as_posix()
+        source = source_relative_path(model.source_path)
         selected_sources.add(source)
         include_path = includes_by_source.get(source)
         if include_path is None:
@@ -1415,7 +1421,7 @@ def audit(contexts, patterns=()):
     units = conversion_units(contexts)
     selected_units = {}
     for filename, unit in units.items():
-        relative_source = Path(unit["source"]).relative_to(SOURCE).as_posix()
+        relative_source = source_relative_path(unit["source"])
         if not patterns or any(fnmatch.fnmatchcase(relative_source, pattern)
                                for pattern in patterns):
             selected_units[filename] = unit
@@ -1445,10 +1451,11 @@ def audit(contexts, patterns=()):
         object_path = output / (candidate.stem + ".o")
         result = subprocess.run(
             [str(FBC), "-c", "-w", "all", "-maxerr", "10",
-             "-i", str(SOURCE.parent), "-i", str(PORT / "profiles"),
+             "-i", str(PORT.parent), "-i", str(SOURCE),
+             "-i", str(PORT / "profiles"),
              str(candidate),
              "-o", str(object_path)],
-            cwd=SOURCE, capture_output=True, text=True, check=False)
+            cwd=PORT.parent, capture_output=True, text=True, check=False)
         log = PORT / "logs/compile" / (candidate.stem + ".log")
         log.parent.mkdir(parents=True, exist_ok=True)
         log.write_text(result.stdout + result.stderr, encoding="utf-8")
