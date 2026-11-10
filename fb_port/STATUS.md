@@ -1,18 +1,27 @@
 # Port status
 
-Last recorded full refresh: 2026-11-03.
+## Build recorded 2026-11-10
 
-- The production set covers 498 compiler contexts from 485 Coreutils source
-  files. Its 498 FreeBASIC bodies and 498 type includes match the recorded
-  current C2FB refresh.
-- The audit recorded 3,884 translated functions, 181 generated helpers, and
-  61 intentional repeated-header-helper exclusions. It reported no missing
-  production candidates or missing reference symbols.
-- A 104-command hybrid build passed the recorded upstream suite with 606
-  passes, 114 skips, and no failures. These results are historical and depend
-  on the Linux x86-64 toolchain and the external C support libraries.
+- The fresh Coreutils 9.12 reference build captured 498 production compile
+  contexts covering 485 source files.
+- C2FB generated 498 FreeBASIC bodies and 498 type includes. The audit compiled
+  all 498 modules, emitted 3,884 functions and 181 generated helpers, and found
+  no missing candidates or reference symbols. Its 61 skipped functions are
+  intentional repeated-header-helper exclusions.
+- The FreeBASIC replacement archive contains 352 members and 721 global
+  symbols. The linker localized 62 duplicate symbols to match C object
+  visibility, then linked all 109 configured commands.
+- The build used FreeBASIC 1.20.5-2 on Linux x86-64. It did not run the
+  upstream test suite or verify runtime behavior for these newly linked
+  binaries. Local outputs are under `fb_port/build/hybrid-built-now/` and are
+  ignored by Git.
 
-This does not establish a complete native FreeBASIC port. Several generated
-bodies remain partial candidates, and Windows and AArch64 runtime coverage is
-incomplete. The upstream C source checkout is required to reproduce the
-reference build, audit, and full test run.
+## Earlier test results
+
+An earlier 104-command hybrid build passed 606 upstream tests, skipped 114,
+and had no failures. Those results are historical and do not verify the
+2026-11-10 build.
+
+Windows and AArch64 runtime coverage remains incomplete. Keep a separate GNU
+Coreutils 9.12 source checkout to reproduce the reference build, translation,
+audit, and command links; its implementation sources are not included here.
