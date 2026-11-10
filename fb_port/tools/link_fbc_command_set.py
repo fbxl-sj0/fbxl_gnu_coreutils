@@ -25,7 +25,6 @@ PORT = Path(__file__).resolve().parents[1]
 REFERENCE = PORT / "build/reference"
 OBJECT_DIRECTORY = PORT / "build/objects-context"
 SUPPORT_ARCHIVE = PORT / "build/fbc-support-library/libcoreutils.a"
-VERSION_OBJECT = OBJECT_DIRECTORY / "version_0273d49bf8fd_candidates.o"
 OUTPUT_DIRECTORY = (
     PORT / "build/hybrid-current-audit-candidates-104-no-project-c-archives"
 )
@@ -40,10 +39,26 @@ CURRENT_EXTRA_SOURCES_BY_PROGRAM = {
         "src/cksum_pclmul.c",
     ),
 }
-CURRENT_OBJECTS_BY_PROGRAM_AND_STEM = {
-    ("[", "test-lbracket"):
-        OBJECT_DIRECTORY / "test-lbracket_9cadf7663c5d_candidates.o",
-}
+def current_version_object():
+    candidates = sorted((PORT / "generated-context").glob(
+        "version_*_candidates.bas"))
+    if len(candidates) != 1:
+        raise RuntimeError(
+            f"expected one current version candidate, found {len(candidates)}"
+        )
+    return OBJECT_DIRECTORY / (candidates[0].stem + ".o")
+
+
+def current_command_object(program, object_stem):
+    if program != "[" or object_stem != "test-lbracket":
+        return None
+    candidates = sorted(OBJECT_DIRECTORY.glob(
+        "test-lbracket_*_candidates.o"))
+    if len(candidates) != 1:
+        raise RuntimeError(
+            f"expected one current test-lbracket object, found {len(candidates)}"
+        )
+    return candidates[0]
 
 
 def make_target_name(program):
@@ -219,9 +234,7 @@ def command_object_inputs(
         reference = (REFERENCE / object_path).resolve()
         candidate_pair = reference_map.get(reference)
         if candidate_pair is None:
-            candidate = CURRENT_OBJECTS_BY_PROGRAM_AND_STEM.get(
-                (program, object_path.stem)
-            )
+            candidate = current_command_object(program, object_path.stem)
             if candidate is None:
                 raise RuntimeError(
                     f"no current audited candidate maps to {reference}")
@@ -294,12 +307,13 @@ def command_link_inputs(program, variables):
     return archives, link_flags
 
 
-def link_command(program, objects, archives, link_flags, fbc, output_directory):
+def link_command(program, objects, archives, link_flags, version_object,
+                 fbc, output_directory):
     destination = output_directory / "src" / program
     command = [
         str(fbc),
         *(str(path) for path in objects),
-        str(VERSION_OBJECT),
+        str(version_object),
         *(str(path) for path in archives),
         str(SUPPORT_ARCHIVE),
         str(SUPPORT_ARCHIVE),
@@ -376,7 +390,8 @@ def main():
     args = parser.parse_args()
     if args.jobs < 1:
         parser.error("--jobs must be positive")
-    for required in (REFERENCE / "Makefile", SUPPORT_ARCHIVE, VERSION_OBJECT,
+    version_object = current_version_object()
+    for required in (REFERENCE / "Makefile", SUPPORT_ARCHIVE, version_object,
                      args.fbc,
                      PORT / "build/conversion-audit-context.json"):
         if not required.is_file():
@@ -403,7 +418,7 @@ def main():
     with ThreadPoolExecutor(max_workers=args.jobs) as executor:
         futures = [executor.submit(
             link_command, program, objects, archives, link_flags,
-            args.fbc.resolve(), args.output_directory.resolve(),
+            version_object, args.fbc.resolve(), args.output_directory.resolve(),
         ) for program, objects, archives, link_flags in plans]
         for future in as_completed(futures):
             results.append(future.result())
